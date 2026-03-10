@@ -1,0 +1,87 @@
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+// Pin setup
+const int tempPin = A0;
+const int ledPin = 7;
+const int buzzerPin = 8;
+const int motorPin = 9;
+const int buttonPin = 6;
+
+bool alarmActive = true;
+bool buttonPrevState = HIGH;
+float lastTemperature = 0;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+  pinMode(motorPin, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
+
+  lcd.begin(16, 2);
+  lcd.print("System Ready");
+  delay(1500);
+  lcd.clear();
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  int tempReading = analogRead(tempPin);
+  float voltage = tempReading * (5.0 / 1023.0);
+  float temperatureC = (voltage - 0.5) * 100;
+
+  // Fan Speed Control
+  int fanSpeed = 0;
+  if (temperatureC <= 25) fanSpeed = 0;
+  else if (temperatureC <= 30) fanSpeed = 100;
+  else if (temperatureC <= 35) fanSpeed = 180;
+  else fanSpeed = 255;
+  analogWrite(motorPin, fanSpeed);
+
+  // Pushbutton check
+  bool buttonCurrState = digitalRead(buttonPin);
+  if (buttonPrevState == HIGH && buttonCurrState == LOW) {
+    alarmActive = false; // You turned off the alarm manually
+  }
+  buttonPrevState = buttonCurrState;
+
+  // Re-enable alarm ONLY if temperature has risen above 30 again
+  if (temperatureC > 30 && temperatureC > lastTemperature) {
+    alarmActive = true;
+  }
+
+  // Alarm Triggering
+  if (temperatureC > 30 && alarmActive) {
+    digitalWrite(ledPin, HIGH);
+    digitalWrite(buzzerPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+    digitalWrite(buzzerPin, LOW);
+  }
+
+  // LCD Display
+  lcd.setCursor(0, 0);
+  lcd.print("Temp: ");
+  lcd.print(temperatureC);
+  lcd.print(" C   ");
+
+  lcd.setCursor(0, 1);
+  lcd.print("Fan: ");
+  lcd.print(map(fanSpeed, 0, 255, 0, 100));
+  lcd.print("%     ");
+
+  // Update lastTemperature
+  lastTemperature = temperatureC;
+
+  delay(500);
+}
+
+
+
+
+
+
+
+
