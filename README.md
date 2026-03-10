@@ -9,6 +9,7 @@ To make the system more interactive, a 16×2 LCD display is used to show the cur
 When the temperature goes above 30 °C, the system triggers an alert using a piezo buzzer and an indicator LED to notify the user that the temperature has crossed the threshold.
 
 A push button is also included as a manual override. Pressing the button disables the buzzer temporarily, allowing the user to silence the alert while the system continues monitoring the temperature.
+
 #What I Learned
 
 While building this project, I got hands-on experience with:
