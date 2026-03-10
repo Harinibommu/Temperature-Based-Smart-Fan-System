@@ -1,4 +1,5 @@
 #Overview
+
 This project is a simple temperature-controlled fan system built using an Arduino Uno and a TMP36 temperature sensor. The idea was to create a small system that can automatically respond to changes in room temperature and adjust cooling accordingly.
 
 The TMP36 sensor measures the ambient temperature and outputs a voltage that is proportional to the temperature. The Arduino reads this analog signal, converts it into a temperature value, and uses it to control the speed of a DC motor that acts as the fan.
@@ -9,6 +10,7 @@ When the temperature goes above 30 °C, the system triggers an alert using a pie
 
 A push button is also included as a manual override. Pressing the button disables the buzzer temporarily, allowing the user to silence the alert while the system continues monitoring the temperature.
 #What I Learned
+
 While building this project, I got hands-on experience with:
 
 Reading analog sensor data using Arduino
