@@ -1,0 +1,4 @@
+1. Sensor measures temperature
+2. Arduino processes analog signal
+3. PWM controls fan speed
+4. Alert triggers if temperature > 30°C
